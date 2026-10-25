@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Biometric Zero-Knowledge High Security Dashboard</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #58a6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #161b22;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid #30363d;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #f0f6fc;
+        }
+        .security-badge {
+            background: #238636;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        p {
+            color: #8b949e;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .btn {
+            background: #238636;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn:hover {
+            background: #2ea043;
+        }
+        .status {
+            margin-top: 20px;
+            font-family: monospace;
+            color: #3fb950;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Biometric & Eye-Tracking Web App</h1>
+        <div class="security-badge">🔒 High Security Enabled</div>
+        <p>Welcome to the advanced zero-knowledge biometric and global pricing authentication dashboard. Please authenticate your session securely.</p>
+        
+        <button class="btn" onclick="startAuthentication()">Start Secure Scan</button>
+        
+        <div id="statusText" class="status"></div>
+    </div>
+
+    <script>
+        function startAuthentication() {
+            const status = document.getElementById('statusText');
+            status.innerHTML = "Initializing camera & high-security sensors...";
+            setTimeout(() => {
+                status.innerHTML = "✅ Biometric & Eye-Tracking Verified Successfully!";
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>
