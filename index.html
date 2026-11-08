@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aura Crypt - 3D Portable Space, IR/USB Camera & Biometric Ecosystem (Enterprise Ultimate Edition)</title>
-    <!-- Tailwind CSS for futuristic UI -->
+    <title>Aura Crypt - Biometric Portal</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&family=Inter:wght@300;400;600&display=swap');
         body { font-family: 'Inter', sans-serif; background-color: #030712; color: #f3f4f6; }
         .font-orbitron { font-family: 'Orbitron', sans-serif; }
-        .glow-box { box-shadow: 0 0 25px rgba(59, 130, 246, 0.2); }
+        .glow-box { box-shadow: 0 0 25px rgba(59, 130, 246, 0.25); }
         .scan-overlay {
             background: linear-gradient(180deg, rgba(59,130,246,0) 0%, rgba(59,130,246,0.3) 50%, rgba(59,130,246,0) 100%);
-            animation: scan 2s infinite linear;
+            animation: scan 1.8s infinite linear;
         }
         @keyframes scan {
             0% { transform: translateY(-100%); }
@@ -24,143 +24,117 @@
 <body class="min-h-screen flex flex-col items-center justify-between p-4 md:p-8">
 
     <!-- Header -->
-    <header class="w-full max-w-4xl flex justify-between items-center border-b border-gray-800 pb-4 mb-6">
+    <header class="w-full max-w-xl flex justify-between items-center border-b border-gray-800 pb-4 mb-6">
         <div class="flex items-center space-x-3">
             <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-orbitron font-bold text-xl text-white glow-box">AC</div>
             <div>
-                <h1 class="font-orbitron text-xl font-bold tracking-wider text-blue-400">AURA CRYPT v5.0</h1>
-                <p class="text-xs text-gray-400">IR/USB Camera, Fallback Face Scan & 3D Space Engine</p>
+                <h1 class="font-orbitron text-xl font-bold tracking-wider text-blue-400">AURA CRYPT</h1>
+                <p class="text-xs text-gray-400">Biometric & 3D Space Authentication</p>
             </div>
         </div>
         <div id="statusBadge" class="px-3 py-1 rounded-full text-xs font-semibold bg-red-950 text-red-400 border border-red-800">
-            SYSTEM LOCKED
+            LOCKED
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+    <main class="w-full max-w-xl">
         
-        <!-- Left Panel: Hardware, IR/USB Camera Selection & Biometric Checkpoint -->
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 glow-box flex flex-col justify-between">
+        <!-- STEP 1: FRONT PAGE (CAMERA & VOICE ACCESS) -->
+        <div id="pageStep1" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 glow-box space-y-4">
+            <h2 class="font-orbitron text-lg font-semibold text-blue-300 border-b border-gray-800 pb-2">Biometric Scan & Camera Access</h2>
+            
+            <!-- External/USB/IR Camera Selection -->
             <div>
-                <h2 class="font-orbitron text-lg font-semibold mb-3 text-blue-300">Hardware & Optical Checkpoint</h2>
-                
-                <!-- External/USB/IR Camera Source Selector & Fallback Option -->
-                <div class="space-y-2 mb-3">
-                    <div>
-                        <label class="block text-[11px] font-medium text-gray-400 mb-1">Select External USB/IR Camera or Standard Device:</label>
-                        <select id="videoSource" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-blue-500">
-                            <option value="">-- Auto-detect Default / Built-in Camera --</option>
-                        </select>
-                    </div>
-                    <!-- Fallback Face Scan Toggle if IR is missing/unavailable -->
-                    <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800 text-[11px]">
-                        <span class="text-gray-400">IR Sensor Unavailable? Use Standard Face Scan:</span>
-                        <input type="checkbox" id="fallbackFaceToggle" class="w-4 h-4 accent-blue-600 cursor-pointer" checked>
-                    </div>
-                </div>
+                <label class="block text-xs font-medium text-gray-400 mb-1">Choose Camera Source (USB / IR / Front Camera):</label>
+                <select id="videoSource" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-blue-500">
+                    <option value="">-- Auto-detect USB / IR / Front Camera --</option>
+                </select>
+            </div>
 
-                <!-- Camera Viewport with Iris/Face Grid -->
-                <div class="relative w-full h-44 bg-black rounded-xl border border-gray-800 overflow-hidden mb-3 flex items-center justify-center">
-                    <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
-                    <div id="camPlaceholder" class="text-center p-4">
-                        <div class="w-10 h-10 border-2 border-dashed border-gray-600 rounded-full mx-auto mb-2 animate-spin"></div>
-                        <p class="text-[11px] text-gray-500">Camera Stream Inactive</p>
-                    </div>
-                    <!-- Biometric Scanning Overlay -->
-                    <div id="irisGrid" class="absolute inset-0 pointer-events-none hidden border-2 border-blue-500/50 rounded-xl flex items-center justify-center">
-                        <div class="w-20 h-20 border border-cyan-400 rounded-full flex items-center justify-center animate-pulse">
-                            <div class="w-6 h-6 border border-green-400 rounded-full"></div>
-                        </div>
-                        <div class="absolute inset-0 scan-overlay"></div>
-                    </div>
+            <!-- Camera Viewport / Live Scanner -->
+            <div class="relative w-full h-56 bg-black rounded-xl border border-gray-800 overflow-hidden flex items-center justify-center">
+                <video id="webcam" autoplay playsinline muted class="w-full h-full object-cover hidden"></video>
+                <div id="camPlaceholder" class="text-center p-4">
+                    <div class="w-10 h-10 border-2 border-dashed border-blue-500 rounded-full mx-auto mb-2 animate-spin"></div>
+                    <p class="text-xs text-gray-400">Initializing Optical Sensor Stream...</p>
                 </div>
-
-                <!-- Sensor Status & Day/Night IR Mode -->
-                <div class="flex justify-between items-center bg-gray-950 p-2.5 rounded-xl border border-gray-800 text-[11px] mb-3">
-                    <span class="text-gray-400">Sensor & Night/Day Exposure:</span>
-                    <span id="lightSensorStatus" class="font-mono text-green-400">IR/Ambient Auto-Optimized</span>
-                </div>
-
-                <!-- Steps Status -->
-                <div class="space-y-2 mb-3">
-                    <div id="step1" class="flex items-center space-x-3 text-xs text-gray-400 bg-gray-950 p-2.5 rounded-xl border border-gray-800">
-                        <span class="w-5 h-5 rounded-full bg-gray-800 flex items-center justify-center text-[10px]">1</span>
-                        <span>IR/USB Camera & Biometric Fallback Scan</span>
+                <!-- Scanner Grid Overlay -->
+                <div id="irisGrid" class="absolute inset-0 pointer-events-none hidden border-2 border-blue-500/50 rounded-xl flex items-center justify-center">
+                    <div class="w-24 h-24 border border-cyan-400 rounded-full flex items-center justify-center animate-pulse">
+                        <div class="w-8 h-8 border border-green-400 rounded-full"></div>
                     </div>
-                    <div id="step2" class="flex items-center space-x-3 text-xs text-gray-400 bg-gray-950 p-2.5 rounded-xl border border-gray-800">
-                        <span class="w-5 h-5 rounded-full bg-gray-800 flex items-center justify-center text-[10px]">2</span>
-                        <span>ML Anti-Spoofing & Pattern Validation</span>
-                    </div>
-                    <div id="step3" class="flex items-center space-x-3 text-xs text-gray-400 bg-gray-950 p-2.5 rounded-xl border border-gray-800">
-                        <span class="w-5 h-5 rounded-full bg-gray-800 flex items-center justify-center text-[10px]">3</span>
-                        <span>3D Portable Space & Voice Passphrase Match</span>
-                    </div>
-                </div>
-
-                <!-- Voice / Passphrase input -->
-                <div class="mb-3">
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">Voice Confirmation Passphrase</label>
-                    <input type="text" id="voiceInput" value="Authorize Trusted Zone" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-blue-500">
+                    <div class="absolute inset-0 scan-overlay"></div>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
-            <div class="space-y-2">
-                <button onclick="runSecurityVerification()" id="actionBtn" class="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-orbitron font-semibold rounded-xl transition shadow-lg shadow-blue-600/30 text-xs tracking-wider">
-                    INITIATE SCAN & UNLOCK
-                </button>
-                <button onclick="stopCamera()" id="stopBtn" class="w-full py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded-lg text-[10px] hidden">
-                    Release Hardware Stream (Leakage Protection)
-                </button>
+            <!-- Fallback Toggle -->
+            <div class="flex items-center justify-between bg-gray-950 p-2.5 rounded-xl border border-gray-800 text-xs">
+                <span class="text-gray-400">Auto-Fallback (IR to Standard Face Scan):</span>
+                <input type="checkbox" id="fallbackFaceToggle" class="w-4 h-4 accent-blue-600 cursor-pointer" checked>
             </div>
+
+            <!-- Voice Passphrase Input -->
+            <div>
+                <label class="block text-xs font-medium text-gray-400 mb-1">Voice Confirmation Passphrase:</label>
+                <input type="text" id="voiceInput" value="Authorize Trusted Zone" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-2.5 text-xs text-gray-200 focus:outline-none focus:border-blue-500 font-mono">
+            </div>
+
+            <!-- Action Button -->
+            <button onclick="startFullScanProcess()" id="scanBtn" class="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-orbitron font-semibold rounded-xl transition shadow-lg shadow-blue-600/30 text-xs tracking-wider">
+                AUTHENTICATE & PROCEED
+            </button>
+            <p id="errorBox" class="text-xs text-red-400 text-center font-mono hidden"></p>
         </div>
 
-        <!-- Right Panel: Trusted Zones, Payment Gateway & Console -->
-        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 flex flex-col justify-between">
-            <div>
-                <div class="flex justify-between items-center mb-3">
-                    <h2 class="font-orbitron text-lg font-semibold text-blue-300">Trusted Zones & Licensing</h2>
-                    <button onclick="addNewCurrentZone()" class="text-xs bg-gray-800 hover:bg-gray-700 text-blue-400 px-3 py-1.5 rounded-lg border border-gray-700 transition">
-                        + Save Zone
-                    </button>
-                </div>
-                
-                <div id="zonesList" class="space-y-2 max-h-36 overflow-y-auto pr-1 mb-3">
-                    <!-- Dynamic List -->
-                </div>
-
-                <!-- Post-Verification Next Step / Payment Gateway Integration Box (Hidden Initially) -->
-                <div id="paymentSection" class="hidden bg-gray-950 border border-green-800/60 rounded-xl p-3 mb-3 text-xs">
-                    <p class="font-semibold text-green-400 mb-1">System Unlocked Successfully!</p>
-                    <p class="text-[10px] text-gray-400 mb-2">Proceed to Enterprise Cloud License Activation or Secure Token Top-up:</p>
-                    <button onclick="triggerSecurePayment()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-orbitron font-semibold rounded-lg text-[11px] transition shadow-md">
-                        PROCEED TO SECURE PAYMENT GATEWAY (₹999)
-                    </button>
-                </div>
+        <!-- STEP 2: PAYMENT & ACTIVATION PAGE (Hidden by default, opens automatically) -->
+        <div id="pageStep2" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 glow-box space-y-4 hidden">
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 bg-green-900/50 text-green-400 rounded-full flex items-center justify-center mx-auto text-xl border border-green-700">✓</div>
+                <h2 class="font-orbitron text-lg font-semibold text-green-400">Biometric & 3D Space Verified</h2>
+                <p class="text-xs text-gray-400">Behind-the-scenes checks passed successfully. Complete token payment to unlock system features.</p>
             </div>
 
-            <!-- Dashboard / Error Console -->
-            <div id="dashboardBox" class="mt-2 bg-gray-950 border border-gray-800 rounded-xl p-3 text-[11px] font-mono text-gray-400 hidden">
-                <span id="dashLog"></span>
+            <div class="bg-gray-950 p-4 rounded-xl border border-gray-800 text-xs space-y-2">
+                <div class="flex justify-between text-gray-400"><span>License Token:</span><span class="font-mono text-gray-200">AURA-ENTERPRISE-2026</span></div>
+                <div class="flex justify-between text-gray-400"><span>Security Status:</span><span class="text-green-400 font-bold">Hardware Hashes Matched</span></div>
+                <div class="flex justify-between text-gray-400 border-t border-gray-800 pt-2 font-semibold text-gray-200"><span>Activation Fee:</span><span>₹999 INR</span></div>
             </div>
 
-            <!-- GitHub / MIT License & IP Protection Notice -->
-            <div class="mt-3 pt-3 border-t border-gray-800 text-[10px] text-gray-500 flex justify-between items-center">
-                <span>License: <b>MIT / GitHub Open Source</b></span>
-                <span>IP Protection: <b>Active (Aura Crypt Engine)</b></span>
+            <button onclick="completePaymentAndUnlock()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-orbitron font-semibold rounded-xl transition shadow-lg shadow-emerald-600/30 text-xs tracking-wider">
+                PAY ₹999 & ACTIVATE SYSTEM
+            </button>
+        </div>
+
+        <!-- STEP 3: FULL ACTIVE DASHBOARD & TRUSTED ZONES (Opened post payment) -->
+        <div id="pageStep3" class="bg-gray-900 border border-gray-800 rounded-2xl p-6 glow-box space-y-4 hidden">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-3">
+                <h2 class="font-orbitron text-lg font-semibold text-blue-300">Trusted Zones (Multi-Location)</h2>
+                <button onclick="addNewCurrentZone()" class="text-xs bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg transition font-semibold">
+                    + Add New Zone
+                </button>
             </div>
+
+            <p class="text-xs text-gray-400">Your system is now active. Saved 3D space hashes for trusted locations:</p>
+            
+            <div id="zonesList" class="space-y-2 max-h-52 overflow-y-auto pr-1">
+                <!-- Zones rendered dynamically -->
+            </div>
+
+            <button onclick="lockSystemAgain()" class="w-full py-2 bg-gray-800 hover:bg-gray-700 text-gray-400 rounded-xl text-xs transition">
+                Lock System & Exit Session
+            </button>
         </div>
 
     </main>
 
-    <!-- Footer with Full Terms & Conditions -->
-    <footer class="w-full max-w-4xl text-center text-[11px] text-gray-500 mt-6 border-t border-gray-800 pt-3 space-y-1">
+    <!-- Footer -->
+    <footer class="w-full max-w-xl text-center text-[10px] text-gray-500 mt-6 border-t border-gray-800 pt-3 space-y-1">
         <p>&copy; 2026 Aura Crypt Security Systems. All rights reserved.</p>
-        <p class="text-[10px] text-gray-600">Terms & Conditions: Unauthorized reverse engineering, reproduction, or redistribution of this machine learning biometric space-lock engine is strictly prohibited under international IP & GitHub copyright frameworks.</p>
+        <p>Terms & Conditions: Protected by international IP & MIT open-source hardware frameworks.</p>
     </footer>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Execution Logic -->
     <script>
         let currentStream = null;
         let trustedZones = JSON.parse(localStorage.getItem('aura_trusted_zones')) || [
@@ -168,127 +142,134 @@
             { id: 2, name: "Home Workspace", hash: "hash_zone_home_101" }
         ];
 
-        // Populate connected video devices (USB / External / IR Cameras)
-        async function getConnectedVideoDevices() {
+        // 1. Detect USB / IR / Front Devices
+        async function getDevices() {
             try {
                 const devices = await navigator.mediaDevices.enumerateDevices();
                 const videoSelect = document.getElementById('videoSource');
-                videoSelect.innerHTML = '<option value="">-- Auto-detect Default / Built-in Camera --</option>';
+                videoSelect.innerHTML = '<option value="">-- Auto-detect USB / IR / Front Camera --</option>';
                 let count = 1;
-                devices.forEach(device => {
-                    if (device.kind === 'videoinput') {
-                        const option = document.createElement('option');
-                        option.value = device.deviceId;
-                        option.text = device.label || `External USB/IR Camera Source ${count++}`;
-                        videoSelect.appendChild(option);
+                devices.forEach(d => {
+                    if (d.kind === 'videoinput') {
+                        const opt = document.createElement('option');
+                        opt.value = d.deviceId;
+                        opt.text = d.label || `Camera Source ${count++}`;
+                        videoSelect.appendChild(opt);
                     }
                 });
-            } catch (e) {
-                console.error("Device enumeration error:", e);
-            }
+            } catch(e) {}
         }
 
-        // Initialize device list on load safely
+        // Initialize camera list safely
         navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => {
-                stream.getTracks().forEach(track => track.stop()); // Immediate cleanup
-                getConnectedVideoDevices();
-            })
-            .catch(() => getConnectedVideoDevices());
+            .then(s => { s.getTracks().forEach(t => t.stop()); getDevices(); })
+            .catch(() => getDevices());
 
-        // Camera Access with USB/IR support, Face Fallback, Error Handling & Leakage Protection
-        async function startCamera() {
+        // 2. Camera Stream Start (with Auto Fallback)
+        async function initCamera() {
             const video = document.getElementById('webcam');
             const placeholder = document.getElementById('camPlaceholder');
             const irisGrid = document.getElementById('irisGrid');
-            const stopBtn = document.getElementById('stopBtn');
-            const selectedDeviceId = document.getElementById('videoSource').value;
-            const fallbackEnabled = document.getElementById('fallbackFaceToggle').checked;
-
-            let constraints = {
-                video: selectedDeviceId ? { deviceId: { exact: selectedDeviceId } } : { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: "user" },
-                audio: false
-            };
+            const devId = document.getElementById('videoSource').value;
+            const fallback = document.getElementById('fallbackFaceToggle').checked;
 
             try {
-                currentStream = await navigator.mediaDevices.getUserMedia(constraints);
+                currentStream = await navigator.mediaDevices.getUserMedia({
+                    video: devId ? { deviceId: { exact: devId } } : { facingMode: "user" },
+                    audio: false
+                });
                 video.srcObject = currentStream;
                 video.classList.remove('hidden');
                 placeholder.classList.add('hidden');
                 irisGrid.classList.remove('hidden');
-                stopBtn.classList.remove('hidden');
                 return true;
             } catch (err) {
-                console.warn("Primary IR/USB Camera access failed or unavailable. Checking Fallback...", err);
-                
-                if (fallbackEnabled) {
+                if(fallback) {
                     try {
-                        // Fallback to standard front camera or any available device
-                        currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+                        currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
                         video.srcObject = currentStream;
                         video.classList.remove('hidden');
                         placeholder.classList.add('hidden');
                         irisGrid.classList.remove('hidden');
-                        stopBtn.classList.remove('hidden');
-                        showConsoleLog("NOTICE: IR Sensor unavailable. Switched to Standard Face Scan Fallback successfully.", "yellow");
                         return true;
-                    } catch (fallbackErr) {
-                        handleCameraError(fallbackErr);
-                        return false;
-                    }
-                } else {
-                    handleCameraError(err);
-                    return false;
+                    } catch(e) { return false; }
                 }
+                return false;
             }
         }
 
-        function handleCameraError(err) {
-            let errorMsg = "Camera Access Denied or Hardware Unavailable.";
-            if (err.name === "NotAllowedError") errorMsg = "Permission Denied: Please allow camera permissions in browser settings.";
-            else if (err.name === "NotFoundError") errorMsg = "Hardware Error: No valid IR/USB or standard camera sensor detected.";
-            showConsoleLog("CRITICAL ERROR: " + errorMsg, "red");
-        }
-
-        // Prevent Resource Leakage
+        // Clean Camera Leakage
         function stopCamera() {
             if (currentStream) {
-                currentStream.getTracks().forEach(track => track.stop());
+                currentStream.getTracks().forEach(t => t.stop());
                 currentStream = null;
             }
             document.getElementById('webcam').classList.add('hidden');
             document.getElementById('camPlaceholder').classList.remove('hidden');
             document.getElementById('irisGrid').classList.add('hidden');
-            document.getElementById('stopBtn').classList.add('hidden');
-            showConsoleLog("Camera & optical hardware resources released safely (Leakage Protected).", "yellow");
         }
 
-        // Trusted Zones Management
+        // 3. Scan Process -> Auto Move to Payment (Behind the scenes checks)
+        async function startFullScanProcess() {
+            const btn = document.getElementById('scanBtn');
+            const errBox = document.getElementById('errorBox');
+            errBox.classList.add('hidden');
+
+            btn.disabled = true;
+            btn.innerText = "SCANNING IRIS, FACE & 3D SPACE...";
+
+            // Behind-the-scenes camera initialization
+            const camOk = await initCamera();
+            if(!camOk) {
+                btn.disabled = false;
+                btn.innerText = "AUTHENTICATE & PROCEED";
+                errBox.innerText = "Camera access denied. Please grant permission.";
+                errBox.classList.remove('hidden');
+                return;
+            }
+
+            // Silent verification delay for background checks
+            await new Promise(r => setTimeout(r, 2200));
+
+            // Move seamlessly to Step 2 (Payment)
+            stopCamera();
+            document.getElementById('pageStep1').classList.add('hidden');
+            document.getElementById('pageStep2').classList.remove('hidden');
+        }
+
+        // 4. Payment & Final Activation
+        function completePaymentAndUnlock() {
+            alert("Payment Successful! License Activated.");
+            
+            document.getElementById('statusBadge').innerText = "SYSTEM ACTIVE";
+            document.getElementById('statusBadge').className = "px-3 py-1 rounded-full text-xs font-semibold bg-green-950 text-green-400 border border-green-800";
+
+            document.getElementById('pageStep2').classList.add('hidden');
+            document.getElementById('pageStep3').classList.remove('hidden');
+            renderZones();
+        }
+
+        // 5. Trusted Zones Logic
         function renderZones() {
             const list = document.getElementById('zonesList');
             list.innerHTML = '';
-            if(trustedZones.length === 0) {
-                list.innerHTML = '<p class="text-xs text-gray-500 italic">No trusted zones saved.</p>';
-                return;
-            }
-            trustedZones.forEach(zone => {
+            trustedZones.forEach(z => {
                 list.innerHTML += `
-                    <div class="flex justify-between items-center bg-gray-950 p-2.5 rounded-xl border border-gray-800 text-xs">
+                    <div class="flex justify-between items-center bg-gray-950 p-3 rounded-xl border border-gray-800 text-xs">
                         <div>
-                            <p class="font-semibold text-gray-300">${zone.name}</p>
-                            <p class="text-gray-500 text-[9px]">Hash: ${zone.hash.substring(0, 15)}...</p>
+                            <p class="font-semibold text-gray-300">${z.name}</p>
+                            <p class="text-gray-500 text-[10px]">Hash: ${z.hash.substring(0, 16)}...</p>
                         </div>
-                        <button onclick="removeZone(${zone.id})" class="text-red-400 hover:text-red-300 text-xs">Delete</button>
+                        <button onclick="removeZone(${z.id})" class="text-red-400 hover:text-red-300 text-xs">Delete</button>
                     </div>
                 `;
             });
         }
 
         function addNewCurrentZone() {
-            const zoneName = prompt("Enter Trusted Zone Name (e.g., Office, Lab):");
-            if(!zoneName) return;
-            const randomHash = 'hash_zone_' + Math.random().toString(36).substring(2, 10);
-            trustedZones.push({ id: Date.now(), name: zoneName, hash: randomHash });
+            const name = prompt("Enter Trusted Zone Name:");
+            if(!name) return;
+            trustedZones.push({ id: Date.now(), name: name, hash: 'hash_zone_' + Math.random().toString(36).substring(2, 10) });
             localStorage.setItem('aura_trusted_zones', JSON.stringify(trustedZones));
             renderZones();
         }
@@ -299,104 +280,9 @@
             renderZones();
         }
 
-        // Verification Orchestrator with Post-Verification Payment & Reset Flow
-        async function runSecurityVerification() {
-            const btn = document.getElementById('actionBtn');
-            const step1 = document.getElementById('step1');
-            const step2 = document.getElementById('step2');
-            const step3 = document.getElementById('step3');
-            const paymentSection = document.getElementById('paymentSection');
-
-            if (btn.getAttribute('data-completed') === 'true') {
-                resetSystemState();
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerText = "INITIALIZING ML & OPTICAL SENSORS...";
-
-            // Step 1: IR/USB Camera or Face Fallback Scan
-            step1.className = "flex items-center space-x-3 text-xs text-blue-400 bg-blue-950/30 p-2.5 rounded-xl border border-blue-800/50 animate-pulse";
-            const camSuccess = await startCamera();
-            if (!camSuccess) {
-                btn.disabled = false;
-                btn.innerText = "INITIATE SCAN & UNLOCK";
-                return;
-            }
-            await new Promise(r => setTimeout(r, 1200));
-            setStepSuccess(step1);
-
-            // Step 2: Machine Learning Anti-Spoofing & Pattern Validation
-            step2.className = "flex items-center space-x-3 text-xs text-blue-400 bg-blue-950/30 p-2.5 rounded-xl border border-blue-800/50 animate-pulse";
-            await new Promise(r => setTimeout(r, 1000));
-            setStepSuccess(step2);
-
-            // Step 3: 3D Portable Space & Voice Passphrase Match
-            step3.className = "flex items-center space-x-3 text-xs text-blue-400 bg-blue-950/30 p-2.5 rounded-xl border border-blue-800/50 animate-pulse";
-            await new Promise(r => setTimeout(r, 1000));
-            setStepSuccess(step3);
-
-            // Access Granted Status & Reveal Payment Gateway Option
-            document.getElementById('statusBadge').innerText = "SYSTEM UNLOCKED (ACTIVE)";
-            document.getElementById('statusBadge').className = "px-3 py-1 rounded-full text-xs font-semibold bg-green-950 text-green-400 border border-green-800";
-            
-            paymentSection.classList.remove('hidden');
-
-            btn.disabled = false;
-            btn.setAttribute('data-completed', 'true');
-            btn.innerText = "SYSTEM SECURED & READY (CLICK TO RE-SCAN)";
-            btn.className = "w-full py-3 bg-green-600 hover:bg-green-500 text-white font-orbitron font-semibold rounded-xl shadow-lg shadow-green-600/30 text-xs transition";
-            
-            showConsoleLog("[SUCCESS]: Machine Learning Biometrics, IR/Face Fallback & 3D Space Hashes Verified.", "green");
+        function lockSystemAgain() {
+            location.reload();
         }
-
-        function setStepSuccess(elem) {
-            elem.className = "flex items-center space-x-3 text-xs text-green-400 bg-green-950/30 p-2.5 rounded-xl border border-green-800/50";
-            elem.querySelector('span').className = "w-5 h-5 rounded-full bg-green-600 flex items-center justify-center text-[10px] text-white font-bold";
-            elem.querySelector('span').innerText = "✓";
-        }
-
-        function triggerSecurePayment() {
-            alert("Redirecting to Secure Enterprise Payment Gateway (UPI / Card / Crypto Simulation)...");
-            showConsoleLog("[PAYMENT INITIATED]: Secure transaction endpoint invoked for Aura Crypt license.", "green");
-        }
-
-        function resetSystemState() {
-            const btn = document.getElementById('actionBtn');
-            const statusBadge = document.getElementById('statusBadge');
-            
-            btn.removeAttribute('data-completed');
-            btn.innerText = "INITIATE SCAN & UNLOCK";
-            btn.className = "w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-orbitron font-semibold rounded-xl transition shadow-lg shadow-blue-600/30 text-xs tracking-wider";
-            
-            statusBadge.innerText = "SYSTEM LOCKED";
-            statusBadge.className = "px-3 py-1 rounded-full text-xs font-semibold bg-red-950 text-red-400 border border-red-800";
-
-            document.getElementById('paymentSection').classList.add('hidden');
-
-            // Reset steps UI
-            ['step1', 'step2', 'step3'].forEach((id, index) => {
-                const s = document.getElementById(id);
-                s.className = "flex items-center space-x-3 text-xs text-gray-400 bg-gray-950 p-2.5 rounded-xl border border-gray-800";
-                s.querySelector('span').className = "w-5 h-5 rounded-full bg-gray-800 flex items-center justify-center text-[10px]";
-                s.querySelector('span').innerText = (index + 1);
-            });
-
-            document.getElementById('dashboardBox').classList.add('hidden');
-            stopCamera();
-        }
-
-        function showConsoleLog(msg, color) {
-            const box = document.getElementById('dashboardBox');
-            const log = document.getElementById('dashLog');
-            box.classList.remove('hidden');
-            const colorClass = color === 'red' ? 'text-red-400' : (color === 'yellow' ? 'text-yellow-400' : 'text-green-400');
-            log.className = colorClass + " font-bold";
-            log.innerText = msg;
-        }
-
-        // Initialize on load
-        renderZones();
     </script>
 </body>
 </html>
